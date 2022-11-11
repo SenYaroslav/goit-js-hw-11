@@ -1,6 +1,8 @@
 import { fetchImages } from './js/fetch-api';
 import { createMarkupCard } from './js/create-murkup';
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
   form: document.querySelector('.search-form'),
@@ -34,6 +36,10 @@ function handleFormSubmit(e) {
       newObj.forEach(function (img) {
         createMarkupCard(img);
       });
+      lightbox = new SimpleLightbox('.gallery a', {
+        captionsData: 'alt',
+        captionDelay: 600,
+      });
       Notiflix.Notify.info(`Hooray! We found ${res.data.totalHits} images.`);
 
       if (newObj.length === 40) {
@@ -44,7 +50,7 @@ function handleFormSubmit(e) {
         refs.gallery.firstElementChild.getBoundingClientRect();
 
       window.scrollBy({
-        top: cardHeight * 0.3,
+        top: cardHeight * 0.35,
         behavior: 'smooth',
       });
     })
@@ -65,12 +71,21 @@ function handleLoadMoreBtnClick(e) {
       newObj.forEach(function (img) {
         createMarkupCard(img);
       });
+      lightbox.refresh();
       if (newObj.length < 40) {
         refs.loadMoreBtn.classList.add('is-hidden');
         Notiflix.Notify.info(
           `We're sorry, but you've reached the end of search results.`
         );
       }
+
+      const { height: cardHeight } =
+        refs.gallery.firstElementChild.getBoundingClientRect();
+
+      window.scrollBy({
+        top: cardHeight * 2.5,
+        behavior: 'smooth',
+      });
     })
     .catch(console.log);
 }
