@@ -13,6 +13,7 @@ const refs = {
 let userSearchInput = null;
 let previousSearchInput = null;
 let page = 1;
+let lightbox = null;
 
 function handleFormSubmit(e) {
   e.preventDefault();
